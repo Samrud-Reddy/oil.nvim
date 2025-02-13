@@ -181,7 +181,7 @@ M.show = vim.schedule_wrap(function(actions, should_confirm, cb)
   end
 
   -- We used to use [O]k to confirm, so preserve the old keymap
-  local confirm_keys = { "y", "Y", "o", "O" }
+  local confirm_keys = { "y", "Y", "o", "O", "<cr>" }
   for _, confirm_key in ipairs(confirm_keys) do
     vim.keymap.set("n", confirm_key, function()
       confirm()
