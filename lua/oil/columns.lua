@@ -205,6 +205,31 @@ local function is_entry_directory(entry)
     return false
   end
 end
+M.register("file_type", {
+  render = function(entry, conf)
+    local entry_type = entry[FIELD_TYPE]
+    if conf and conf.icons then
+      return conf.icons[entry_type] or entry_type
+    else
+      return default_type_icons[entry_type] or entry_type
+    end
+  end,
+
+  parse = function(line, conf)
+    return line:match("^(%S+)%s+(.*)$")
+  end,
+
+  get_sort_value = function(entry)
+    if is_entry_directory(entry) then
+      return "a" .. entry[FIELD_NAME] -- Directories should appear first
+    end
+    local entry_type = entry[FIELD_NAME] or ""
+    local file_type = entry_type:match("%.(.+)")
+
+    return "z" .. (file_type or "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
+  end,
+})
+
 M.register("type", {
   render = function(entry, conf)
     local entry_type = entry[FIELD_TYPE]
